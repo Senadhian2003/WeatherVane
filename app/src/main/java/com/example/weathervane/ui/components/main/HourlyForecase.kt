@@ -6,10 +6,13 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -22,12 +25,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil3.compose.AsyncImage
 import com.example.weathervane.R
+import com.example.weathervane.model.Hour
+import com.example.weathervane.model.WeatherModel
 import com.example.weathervane.ui.activity.WeatherForecastActivity
 import com.example.weathervane.ui.theme.customPurpleColor
 
 @Composable
-fun HourlyForecastPanel(){
+fun HourlyForecastPanel(weather : WeatherModel){
 
     Column {
 
@@ -60,13 +66,16 @@ fun HourlyForecastPanel(){
             horizontalArrangement = Arrangement.spacedBy(16.dp),
 
             ) {
-            HourlyForecastData()
-            HourlyForecastData()
-            HourlyForecastData()
-            HourlyForecastData()
-            HourlyForecastData()
-            HourlyForecastData()
+
+            val hourlyData: List<Hour> = weather.forecast?.forecastday?.getOrNull(0)?.hour ?: emptyList()
+
+            hourlyData.forEach{
+                    hourly ->
+                HourlyForecastData(hour = hourly)
+            }
         }
+
+
 
 
 
@@ -77,15 +86,15 @@ fun HourlyForecastPanel(){
 
 
 @Composable
-fun HourlyForecastData(){
+fun HourlyForecastData(hour: Hour){
 
-    Column(modifier = Modifier.height(140.dp).width(96.dp).background(color = customPurpleColor, shape = RoundedCornerShape(16.dp)),
+    Column(modifier = Modifier.width(96.dp).background(color = customPurpleColor, shape = RoundedCornerShape(16.dp)),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
 
         Text(
-            text = "7 am",
+            text = "${hour.time.substringAfter(" ")}",
             color = Color.White, // Adjust color as needed
             fontSize = 16.sp,
             fontWeight = FontWeight.Normal,
@@ -93,10 +102,15 @@ fun HourlyForecastData(){
 
         )
 
-        Image(painter = painterResource(R.drawable.windy), contentDescription = "Forecast weather image" )
+        AsyncImage(
+            model = "https://${hour.condition.icon}",
+            contentDescription = null,
+            modifier = Modifier.aspectRatio(1f).size(40.dp)
+        )
+//        Image(painter = painterResource(R.drawable.windy), contentDescription = "Forecast weather image" )
 
         Text(
-            text = "25°",
+            text = "${hour.temp_c}°",
             color = Color.White, // Adjust color as needed
             fontSize = 18.sp,
             fontWeight = FontWeight.Medium,

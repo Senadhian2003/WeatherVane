@@ -18,19 +18,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.weathervane.R
+import com.example.weathervane.model.WeatherModel
 import com.example.weathervane.ui.theme.customPurpleColor
 
 
 @Composable
-fun WeatherMetaDataPanel(){
+fun WeatherMetaDataPanel(weather : WeatherModel){
 
     Row(
-        modifier = Modifier.fillMaxWidth().height(200.dp).padding(0.dp,24.dp).background(color = customPurpleColor, shape = RoundedCornerShape(16.dp)),
+        modifier = Modifier.fillMaxWidth().padding(0.dp,24.dp).background(color = customPurpleColor, shape = RoundedCornerShape(16.dp)),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        WeatherMetaData(R.drawable.rain, "22%", "Rain")
-        WeatherMetaData(R.drawable.wind, "12km/hr", "Wind")
-        WeatherMetaData(R.drawable.humidity, "18%", "Humidity")
+        WeatherMetaData(R.drawable.rain, "${weather.forecast.forecastday[0].day.daily_chance_of_rain}%", "Rain")
+        WeatherMetaData(R.drawable.wind, "${weather.current.wind_kph}Km/hr", "Wind")
+        WeatherMetaData(R.drawable.humidity, "${weather.current.humidity}%", "Humidity")
     }
 
 }

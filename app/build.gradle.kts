@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -60,6 +62,35 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+//    Koil Kt for async image download from web
+
     implementation("io.coil-kt.coil3:coil-compose:3.0.4")
     implementation("io.coil-kt.coil3:coil-network-okhttp:3.0.4")
+
+//    View Model
+    val lifecycle_version = "2.8.7"
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version")
+
+//    Network Calls
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+
+//  GSON Converter
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+
+//    Hilt Dagger setup
+    implementation("com.google.dagger:hilt-android:2.51.1")
+    kapt("com.google.dagger:hilt-android-compiler:2.51.1")
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+
+    //    REDUX
+    implementation("org.reduxkotlin:redux-kotlin-threadsafe-jvm:0.5.5")
+
+//  Location service
+    implementation("com.google.android.gms:play-services-location:21.3.0")
+
+}
+
+kapt {
+    correctErrorTypes = true
 }
